@@ -35,7 +35,7 @@ input, select, textarea {
 /* Links */
 a {
   color: #0056b3 !important; /* Darker blue links */
-  text-decoration: underline !important;
+  text-decoration: none !important;
 }
 
 /* Cards */
@@ -53,4 +53,44 @@ h1, h2, h3, h4, h5, h6 {
 p {
   color: rgba(0, 0, 0, 0.75) !important; /* Darker paragraph text */
   line-height: 1.6 !important; /* Increase line spacing */
+}
+
+/* Keep underlines for links inside regular text content if needed */
+p a, .content a {
+  text-decoration: underline !important;
+}
+
+/* Form control styles - Enhanced visibility */
+.form-control, .form-select {
+  border: 3px solid #6c757d !important; /* Thicker, darker border */
+  border-radius: 6px !important;
+  padding: 0.75rem !important;
+  transition: all 0.2s ease-in-out !important;
+  background-color: #ffffff !important;
+}
+
+.form-control:focus, .form-select:focus {
+  border-color: #0d6efd !important;
+  border-width: 3px !important;
+  box-shadow: 0 0 0 2px rgba(13, 110, 253, 0.25) !important; /* Subtle focus ring */
+  outline: none !important;
+}
+
+/* Form label styles - Enhanced readability */
+.form-label {
+  font-weight: 600 !important;
+  font-size: 1rem !important;
+  color: #212529 !important;
+  margin-bottom: 0.5rem !important;
+}
+
+/* Card styles for sign-in/sign-up forms */
+.auth-card {
+  border: 2px solid #dee2e6 !important;
+  border-radius: 8px !important;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1) !important;
+}
+
+.auth-card .card-body {
+  padding: 2rem !important;
 }

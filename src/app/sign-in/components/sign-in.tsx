@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 
-const SignInPage: React.FC = () => {
+export default function SignInPage() {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [error, setError] = useState<string | null>(null);
@@ -34,7 +34,7 @@ const SignInPage: React.FC = () => {
         <div className="container">
           <div className="row justify-content-center">
             <div className="col-md-6 col-lg-4">
-              <div className="card border-0 shadow-sm">
+              <div className="card auth-card">
                 <div className="card-body p-4">
                   <h1 className="h4 text-center mb-4">Sign In</h1>
                   {error && <div className="alert alert-danger" role="alert">{error}</div>}
@@ -71,6 +71,4 @@ const SignInPage: React.FC = () => {
       </main>
     </div>
   );
-};
-
-export default SignInPage;
+}

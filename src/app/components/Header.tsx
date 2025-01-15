@@ -5,9 +5,9 @@ import Link from 'next/link';
 
 export default function Header() {
   return (
-    <nav className="navbar navbar-expand-lg navbar-light bg-light">
+    <nav className="navbar navbar-expand-lg navbar-dark bg-primary">
       <div className="container">
-        <Link href="/" className="navbar-brand">
+        <Link href="/" className="navbar-brand text-white">
           Orange Field University
         </Link>
 
@@ -26,27 +26,27 @@ export default function Header() {
         <div className="collapse navbar-collapse" id="navbarNav">
           <ul className="navbar-nav me-auto mb-2 mb-lg-0">
             <li className="nav-item">
-              <Link href="/courses" className="nav-link">
+              <Link href="/courses" className="nav-link text-white">
                 Courses
               </Link>
             </li>
             <li className="nav-item">
-              <Link href="/about" className="nav-link">
+              <Link href="/about" className="nav-link text-white">
                 About
               </Link>
             </li>
             <li className="nav-item">
-              <Link href="/contact" className="nav-link">
+              <Link href="/contact" className="nav-link text-white">
                 Contact
               </Link>
             </li>
           </ul>
 
           <div className="d-flex align-items-center gap-3">
-            <Link href="/sign-in" className="btn btn-outline-primary me-2">
+            <Link href="/sign-in" className="btn btn-outline-light">
               Sign In
             </Link>
-            <Link href="/sign-up" className="btn btn-primary">
+            <Link href="/sign-up" className="btn btn-light">
               Sign Up
             </Link>
           </div>
