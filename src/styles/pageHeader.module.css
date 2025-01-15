@@ -1,0 +1,43 @@
+.pageHeader {
+  @apply relative overflow-hidden;
+}
+
+.headerContent {
+  @apply relative z-10;
+}
+
+.logo {
+  @apply transition-transform duration-300;
+}
+
+.logo:hover {
+  @apply transform scale-105;
+}
+
+.title {
+  @apply text-4xl font-bold text-gray-900 mb-4;
+  font-family: var(--font-geist-sans);
+}
+
+.subtitle {
+  @apply text-xl text-gray-600 max-w-2xl mx-auto;
+}
+
+/* Add a subtle background pattern */
+.pageHeader::before {
+  content: '';
+  @apply absolute inset-0 bg-gradient-to-b from-gray-50 to-white opacity-50;
+  background-image: radial-gradient(circle at 1px 1px, gray 1px, transparent 0);
+  background-size: 40px 40px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 640px) {
+  .title {
+    @apply text-3xl;
+  }
+  
+  .subtitle {
+    @apply text-lg;
+  }
+} 
