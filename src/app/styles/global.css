@@ -1,0 +1,56 @@
+/* bootstrap is hard to read, so we need to override it */
+@import "bootstrap/dist/css/bootstrap.min.css";
+/* Global overrides for Bootstrap */
+
+/* Borders */
+*,
+*:before,
+*:after {
+  border-width: 2px !important; /* Thicker borders */
+  border-color: rgba(0, 0, 0, 0.6) !important; /* Darker borders */
+}
+
+/* Buttons */
+.btn {
+  border-color: rgba(0, 0, 0, 0.8) !important; /* Dark button borders */
+  background-color: #0056b3 !important; /* Darker blue background */
+  color: #fff !important; /* Ensure text is visible */
+}
+
+/* Inputs, Selects, and Textareas */
+input, select, textarea {
+  border-color: rgba(0, 0, 0, 0.6) !important; /* Darker input borders */
+  box-shadow: none !important; /* Remove glow shadows */
+}
+
+/* Tables */
+.table {
+  border-color: rgba(0, 0, 0, 0.6) !important; /* Table border color */
+}
+
+.table th, .table td {
+  border-width: 2px !important; /* Thicker table cell borders */
+}
+
+/* Links */
+a {
+  color: #0056b3 !important; /* Darker blue links */
+  text-decoration: underline !important;
+}
+
+/* Cards */
+.card {
+  border-color: rgba(0, 0, 0, 0.6) !important; /* Darker card borders */
+  background-color: #f8f9fa !important; /* Light gray background */
+}
+
+/* Adjust headings for better contrast */
+h1, h2, h3, h4, h5, h6 {
+  color: rgba(0, 0, 0, 0.85) !important; /* Darker heading text */
+}
+
+/* Adjust paragraphs for better readability */
+p {
+  color: rgba(0, 0, 0, 0.75) !important; /* Darker paragraph text */
+  line-height: 1.6 !important; /* Increase line spacing */
+}

@@ -1,0 +1,12 @@
+@use "node_modules/bootstrap/scss/bootstrap" as *;
+
+
+// Customize border variables
+$border-width: 2px; // Increase border thickness
+$border-color: rgba(0, 0, 0, 0.5); // Darker border color
+$table-border-color: rgba(0, 0, 0, 0.6); // Darker table border color
+
+// Optional: Override specific component styles
+$card-border-color: rgba(0, 0, 0, 0.6);
+
+// Import Bootstrap after variable customization
