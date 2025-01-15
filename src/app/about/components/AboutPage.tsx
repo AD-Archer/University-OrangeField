@@ -1,58 +1,143 @@
+'use client';
+
 import React from 'react';
-import 'bootstrap/dist/css/bootstrap.min.css';
+import Link from 'next/link';
+import Image from 'next/image';
 
-const AboutPage: React.FC = () => {
+export default function AboutPage() {
   return (
-    <div className="container mt-5">
-      <h1 className="text-center mb-4">About Orangefield University</h1>
-
-      <section className="mb-5">
-        <h2>Our Mission</h2>
-        <p>
-          At Orangefield University, our mission is to provide high-quality education that fosters
-          creativity, critical thinking, and innovation. We aim to equip our students with the skills
-          necessary to succeed in a rapidly changing world while instilling a strong sense of
-          social responsibility.
-        </p>
+    <div className="container py-5">
+      {/* Hero Section */}
+      <section className="text-center mb-5">
+        <h1 className="display-4 mb-4">About Orange Field University</h1>
+        <p className="lead mb-4">Inspiring Growth, Transforming Lives Since 1965</p>
       </section>
 
-      <section className="mb-5">
-        <h2>Our History</h2>
-        <p>
-          Founded in 1950, Orangefield University has a long-standing tradition of excellence in
-          education. Over the years, we have expanded our programs to include a wide variety of
-          disciplines, offering degrees at the undergraduate, graduate, and doctoral levels.
-          Throughout our history, we have remained committed to providing an inclusive, supportive,
-          and challenging environment for all students.
-        </p>
+      {/* Mission & Vision */}
+      <section className="row g-4 mb-5">
+        <div className="col-md-6">
+          <div className="card h-100">
+            <div className="card-body">
+              <h2 className="card-title h3 text-primary mb-3">Our Mission</h2>
+              <p className="card-text">
+                To provide exceptional education that empowers students to become innovative leaders
+                and responsible global citizens through academic excellence, research, and community engagement.
+              </p>
+            </div>
+          </div>
+        </div>
+        <div className="col-md-6">
+          <div className="card h-100">
+            <div className="card-body">
+              <h2 className="card-title h3 text-primary mb-3">Our Vision</h2>
+              <p className="card-text">
+                To be a leading institution of higher education, recognized globally for academic
+                excellence, innovative research, and positive impact on society.
+              </p>
+            </div>
+          </div>
+        </div>
       </section>
 
-      <section className="mb-5">
-        <h2>Core Values</h2>
-        <ul>
-          <li><strong>Excellence:</strong> Striving for the highest standards in all areas of education.</li>
-          <li><strong>Innovation:</strong> Encouraging creativity, exploration, and a forward-thinking approach.</li>
-          <li><strong>Diversity:</strong> Fostering an inclusive environment that celebrates different perspectives.</li>
-          <li><strong>Integrity:</strong> Upholding the highest ethical standards in all aspects of university life.</li>
-          <li><strong>Community:</strong> Building a strong and supportive network of students, faculty, and alumni.</li>
-        </ul>
+      {/* Key Statistics */}
+      <section className="py-5 bg-light rounded mb-5">
+        <div className="row text-center g-4">
+          <div className="col-md-3">
+            <h3 className="display-4 fw-bold text-primary">5k+</h3>
+            <p className="text-muted">Students</p>
+          </div>
+          <div className="col-md-3">
+            <h3 className="display-4 fw-bold text-primary">200+</h3>
+            <p className="text-muted">Faculty Members</p>
+          </div>
+          <div className="col-md-3">
+            <h3 className="display-4 fw-bold text-primary">50+</h3>
+            <p className="text-muted">Programs</p>
+          </div>
+          <div className="col-md-3">
+            <h3 className="display-4 fw-bold text-primary">95%</h3>
+            <p className="text-muted">Employment Rate</p>
+          </div>
+        </div>
       </section>
 
-      <section>
-        <h2>Why Choose Us?</h2>
-        <p>
-          Orangefield University offers a comprehensive education in a vibrant and supportive
-          environment. With experienced faculty, state-of-the-art facilities, and a strong emphasis on
-          practical experience, we prepare our graduates to be leaders in their fields.
-        </p>
-        <p>
-          Our extensive student support services, diverse extracurricular activities, and commitment
-          to lifelong learning ensure that each student has the resources they need to succeed both
-          academically and personally.
-        </p>
+      {/* Values */}
+      <section className="mb-5">
+        <h2 className="h2 text-center mb-4">Our Core Values</h2>
+        <div className="row g-4">
+          {[
+            {
+              title: "Excellence",
+              description: "Striving for the highest standards in education and research"
+            },
+            {
+              title: "Innovation",
+              description: "Fostering creativity and forward-thinking solutions"
+            },
+            {
+              title: "Integrity",
+              description: "Maintaining ethical standards and accountability"
+            },
+            {
+              title: "Diversity",
+              description: "Embracing and celebrating different perspectives"
+            }
+          ].map((value, index) => (
+            <div key={index} className="col-md-6 col-lg-3">
+              <div className="card h-100">
+                <div className="card-body text-center">
+                  <h3 className="h5 card-title text-primary mb-3">{value.title}</h3>
+                  <p className="card-text">{value.description}</p>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Leadership */}
+      <section className="mb-5">
+        <h2 className="h2 text-center mb-4">University Leadership</h2>
+        <div className="row g-4">
+          <div className="col-md-4">
+            <div className="card text-center">
+              <div className="card-body">
+                <h3 className="h5">Dr. Sarah Johnson</h3>
+                <p className="text-muted">President</p>
+              </div>
+            </div>
+          </div>
+          <div className="col-md-4">
+            <div className="card text-center">
+              <div className="card-body">
+                <h3 className="h5">Dr. Michael Chen</h3>
+                <p className="text-muted">Vice President of Academic Affairs</p>
+              </div>
+            </div>
+          </div>
+          <div className="col-md-4">
+            <div className="card text-center">
+              <div className="card-body">
+                <h3 className="h5">Dr. Emily Rodriguez</h3>
+                <p className="text-muted">Dean of Students</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* CTA Section */}
+      <section className="text-center py-5">
+        <h2 className="h3 mb-4">Join Our Community</h2>
+        <div className="d-flex justify-content-center gap-3">
+          <Link href="/apply" className="btn btn-primary btn-lg">
+            Apply Now
+          </Link>
+          <Link href="/contact" className="btn btn-outline-primary btn-lg">
+            Contact Us
+          </Link>
+        </div>
       </section>
     </div>
   );
-};
-
-export default AboutPage;
+}
