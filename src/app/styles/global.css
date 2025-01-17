@@ -1,96 +1,16 @@
-/* bootstrap is hard to read, so we need to override it */
+/* Main imports and global resets */
 @import "bootstrap/dist/css/bootstrap.min.css";
-/* Global overrides for Bootstrap */
+@import "./base/typography.css";
+@import "./base/layout.css";
+@import "./components/header.css";
+@import "./components/forms.css";
+@import "./components/cards.css";
+@import "./components/buttons.css";
 
-/* Borders */
+/* Global resets */
 *,
 *:before,
 *:after {
-  border-width: 2px !important; /* Thicker borders */
-  border-color: rgba(0, 0, 0, 0.6) !important; /* Darker borders */
-}
-
-/* Buttons */
-.btn {
-  border-color: rgba(0, 0, 0, 0.8) !important; /* Dark button borders */
-  background-color: #0056b3 !important; /* Darker blue background */
-  color: #fff !important; /* Ensure text is visible */
-}
-
-/* Inputs, Selects, and Textareas */
-input, select, textarea {
-  border-color: rgba(0, 0, 0, 0.6) !important; /* Darker input borders */
-  box-shadow: none !important; /* Remove glow shadows */
-}
-
-/* Tables */
-.table {
-  border-color: rgba(0, 0, 0, 0.6) !important; /* Table border color */
-}
-
-.table th, .table td {
-  border-width: 2px !important; /* Thicker table cell borders */
-}
-
-/* Links */
-a {
-  color: #0056b3 !important; /* Darker blue links */
-  text-decoration: none !important;
-}
-
-/* Cards */
-.card {
-  border-color: rgba(0, 0, 0, 0.6) !important; /* Darker card borders */
-  background-color: #f8f9fa !important; /* Light gray background */
-}
-
-/* Adjust headings for better contrast */
-h1, h2, h3, h4, h5, h6 {
-  color: rgba(0, 0, 0, 0.85) !important; /* Darker heading text */
-}
-
-/* Adjust paragraphs for better readability */
-p {
-  color: rgba(0, 0, 0, 0.75) !important; /* Darker paragraph text */
-  line-height: 1.6 !important; /* Increase line spacing */
-}
-
-/* Keep underlines for links inside regular text content if needed */
-p a, .content a {
-  text-decoration: underline !important;
-}
-
-/* Form control styles - Enhanced visibility */
-.form-control, .form-select {
-  border: 3px solid #6c757d !important; /* Thicker, darker border */
-  border-radius: 6px !important;
-  padding: 0.75rem !important;
-  transition: all 0.2s ease-in-out !important;
-  background-color: #ffffff !important;
-}
-
-.form-control:focus, .form-select:focus {
-  border-color: #0d6efd !important;
-  border-width: 3px !important;
-  box-shadow: 0 0 0 2px rgba(13, 110, 253, 0.25) !important; /* Subtle focus ring */
-  outline: none !important;
-}
-
-/* Form label styles - Enhanced readability */
-.form-label {
-  font-weight: 600 !important;
-  font-size: 1rem !important;
-  color: #212529 !important;
-  margin-bottom: 0.5rem !important;
-}
-
-/* Card styles for sign-in/sign-up forms */
-.auth-card {
-  border: 2px solid #dee2e6 !important;
-  border-radius: 8px !important;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1) !important;
-}
-
-.auth-card .card-body {
-  padding: 2rem !important;
+  border-width: 2px !important;
+  border-color: rgba(0, 0, 0, 0.6) !important;
 }

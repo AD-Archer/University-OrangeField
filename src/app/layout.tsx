@@ -1,10 +1,12 @@
-import "@/styles/globals.css";
+import "@/app/styles/global.css";
 import { GeistSans } from "geist/font/sans";
 import { type Metadata } from "next";
-import AuthProvider from "../components/AuthProvider";
-import Header from "../components/Header";
+import AuthProvider from "./components/AuthProvider";
+import Header from "./components/Header";
 import Script from 'next/script';
-import Footer from "../components/Footer";
+import Footer from "./components/Footer";
+import 'bootstrap/dist/css/bootstrap.min.css';
+import BootstrapClient from './components/BootstrapClient';
 
 export const metadata: Metadata = {
   title: "Orange Field University",
@@ -59,6 +61,7 @@ export default function RootLayout({
           integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
           crossOrigin="anonymous"
         />
+        <BootstrapClient />
       </body>
     </html>
   );

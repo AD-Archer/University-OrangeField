@@ -1,0 +1,18 @@
+/* Button Styles */
+.btn {
+    border-color: rgba(0, 0, 0, 0.8) !important;
+    background-color: #0056b3 !important;
+    color: #fff !important;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+}
+
+.btn:hover {
+    opacity: 0.9;
+}
+
+.btn:disabled {
+    opacity: 0.65;
+    cursor: not-allowed;
+} 

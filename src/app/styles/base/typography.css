@@ -1,0 +1,16 @@
+/* Typography Styles */
+h1, h2, h3, h4, h5, h6 {
+    color: rgba(0, 0, 0, 0.85) !important;
+}
+
+p {
+    color: rgba(0, 0, 0, 0.75) !important;
+    line-height: 1.6 !important;
+}
+
+a {
+    color: #0056b3 !important;
+    text-decoration: none !important;
+}
+
+/* Rest of your typography styles... */ 

@@ -2,10 +2,24 @@
 
 import React, { useState } from 'react';
 import Image from 'next/image';
-import styles from '@/styles/auth.module.css';
+import styles from '@/app/styles/components/signup.module.css';
+import { toast } from 'react-hot-toast';
+
+interface ApiError {
+  error: string;
+}
+
+interface FormData {
+  firstName: string;
+  lastName: string;
+  email: string;
+  password: string;
+  confirmPassword: string;
+  phoneNumber: string;
+}
 
 export default function SignUpPage() {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     firstName: '',
     lastName: '',
     email: '',
@@ -36,7 +50,8 @@ export default function SignUpPage() {
 
     try {
       if (formData.password !== formData.confirmPassword) {
-        throw new Error('Passwords do not match!');
+        toast.error('Passwords do not match!');
+        return;
       }
 
       const response = await fetch('/api/auth/register', {
@@ -53,10 +68,11 @@ export default function SignUpPage() {
         }),
       });
 
-      const data = await response.json();
+      const data = await response.json() as ApiError;
 
       if (!response.ok) {
-        throw new Error(data.error || 'Registration failed');
+        toast.error(data.error || 'Registration failed');
+        return;
       }
 
       setStatus({
@@ -68,11 +84,9 @@ export default function SignUpPage() {
         window.location.href = '/sign-in';
       }, 2000);
 
-    } catch (error) {
-      setStatus({
-        type: 'error',
-        message: error instanceof Error ? error.message : 'Registration failed',
-      });
+    } catch (err) {
+      const error = err as Error;
+      toast.error(error?.message || 'An unexpected error occurred');
     } finally {
       setIsLoading(false);
     }

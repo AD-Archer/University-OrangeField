@@ -1,0 +1,17 @@
+/* Card Styles */
+.card {
+    border-color: rgba(0, 0, 0, 0.6) !important;
+    background-color: #f8f9fa !important;
+}
+
+.auth-card {
+    border: 2px solid #dee2e6 !important;
+    border-radius: 8px !important;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1) !important;
+}
+
+.card-body {
+    padding: 2rem !important;
+}
+
+/* Rest of your card styles... */ 

@@ -69,7 +69,7 @@ export default function HomePage() {
             </div>
           </div>
         </section>
-
+        <br className="mb-5 separator"></br>
         {/* Why Choose Us Section */}
         <section className="py-5">
           <div className="container">

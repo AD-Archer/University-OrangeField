@@ -2,8 +2,11 @@ import { prisma } from "@/lib/prisma";
 import type { NextAuthConfig } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import bcrypt from 'bcryptjs';
+import NextAuth from "next-auth";
+import { PrismaAdapter } from "@auth/prisma-adapter";
 
 export const authConfig = {
+  adapter: PrismaAdapter(prisma),
   providers: [
     Credentials({
       async authorize(credentials) {

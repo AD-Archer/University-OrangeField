@@ -6,6 +6,7 @@ import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
+import styles from '@/app/styles/components/signin.module.css';
 
 export default function SignInPage() {
   const router = useRouter();
@@ -64,104 +65,98 @@ export default function SignInPage() {
   });
 
   return (
-    <div className="container py-5">
-      <div className="row justify-content-center">
-        <div className="col-md-6 col-lg-4">
-          <div className="card auth-card">
-            <div className="card-body">
-              <h1 className="h3 text-center mb-4">Welcome Back</h1>
+    <div className={styles.authContainer}>
+      <div className={styles.authWrapper}>
+        <div className={styles.authCard}>
+          <h1 className={styles.title}>Welcome Back</h1>
 
-              {status.type && (
-                <div className={`alert alert-${status.type === 'success' ? 'success' : 'danger'} mb-4`} role="alert">
-                  {status.message}
-                </div>
-              )}
-
-              <form onSubmit={formik.handleSubmit}>
-                <div className="mb-3">
-                  <label htmlFor="email" className="form-label">Email Address</label>
-                  <input
-                    type="email"
-                    className="form-control"
-                    id="email"
-                    name="email"
-                    value={formik.values.email}
-                    onChange={formik.handleChange}
-                    onBlur={formik.handleBlur}
-                    required
-                    autoComplete="email"
-                  />
-                  {formik.touched.email && formik.errors.email ? (
-                    <div className="text-danger">{formik.errors.email}</div>
-                  ) : null}
-                </div>
-
-                <div className="mb-3">
-                  <label htmlFor="password" className="form-label">Password</label>
-                  <input
-                    type="password"
-                    className="form-control"
-                    id="password"
-                    name="password"
-                    value={formik.values.password}
-                    onChange={formik.handleChange}
-                    onBlur={formik.handleBlur}
-                    required
-                    autoComplete="current-password"
-                  />
-                  {formik.touched.password && formik.errors.password ? (
-                    <div className="text-danger">{formik.errors.password}</div>
-                  ) : null}
-                </div>
-
-                <div className="mb-4">
-                  <div className="form-check">
-                    <input
-                      type="checkbox"
-                      className="form-check-input"
-                      id="rememberMe"
-                      name="rememberMe"
-                      checked={formik.values.rememberMe}
-                      onChange={formik.handleChange}
-                    />
-                    <label className="form-check-label" htmlFor="rememberMe">
-                      Remember me
-                    </label>
-                  </div>
-                </div>
-
-                <button 
-                  type="submit" 
-                  className="btn btn-primary w-100 mb-3"
-                  disabled={isLoading}
-                >
-                  {isLoading ? (
-                    <>
-                      <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
-                      Signing in...
-                    </>
-                  ) : (
-                    'Sign In'
-                  )}
-                </button>
-
-                <div className="text-center">
-                  <Link href="/forgot-password" className="text-decoration-none small">
-                    Forgot your password?
-                  </Link>
-                </div>
-
-                <hr className="my-4" />
-
-                <div className="text-center">
-                  <span className="text-muted small">Don't have an account? </span>
-                  <Link href="/sign-up" className="text-decoration-none small">
-                    Sign Up
-                  </Link>
-                </div>
-              </form>
+          {status.type && (
+            <div className={`${styles.alert} ${styles[status.type]}`}>
+              {status.message}
             </div>
-          </div>
+          )}
+
+          <form onSubmit={formik.handleSubmit} className={styles.form}>
+            <div className={styles.inputWrapper}>
+              <label htmlFor="email" className={styles.label}>Email Address</label>
+              <input
+                type="email"
+                className={styles.input}
+                id="email"
+                name="email"
+                value={formik.values.email}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                required
+                autoComplete="email"
+              />
+              {formik.touched.email && formik.errors.email && (
+                <div className={styles.error}>{formik.errors.email}</div>
+              )}
+            </div>
+
+            <div className={styles.inputWrapper}>
+              <label htmlFor="password" className={styles.label}>Password</label>
+              <input
+                type="password"
+                className={styles.input}
+                id="password"
+                name="password"
+                value={formik.values.password}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                required
+                autoComplete="current-password"
+              />
+              {formik.touched.password && formik.errors.password && (
+                <div className={styles.error}>{formik.errors.password}</div>
+              )}
+            </div>
+
+            <div className={styles.checkboxWrapper}>
+              <input
+                type="checkbox"
+                className={styles.checkbox}
+                id="rememberMe"
+                name="rememberMe"
+                checked={formik.values.rememberMe}
+                onChange={formik.handleChange}
+              />
+              <label htmlFor="rememberMe" className={styles.label}>
+                Remember me
+              </label>
+            </div>
+
+            <button 
+              type="submit" 
+              className={styles.submitButton}
+              disabled={isLoading}
+            >
+              {isLoading ? (
+                <>
+                  <span className={styles.spinner}></span>
+                  Signing in...
+                </>
+              ) : (
+                'Sign In'
+              )}
+            </button>
+
+            <div className={styles.textCenter}>
+              <Link href="/forgot-password" className={styles.link}>
+                Forgot your password?
+              </Link>
+            </div>
+
+            <hr className={styles.divider} />
+
+            <div className={styles.textCenter}>
+              <span className={styles.textMuted}>Don't have an account? </span>
+              <Link href="/sign-up" className={styles.link}>
+                Sign Up
+              </Link>
+            </div>
+          </form>
         </div>
       </div>
     </div>
