@@ -7,7 +7,7 @@ import { useRouter } from 'next/navigation';
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
 import styles from '@/app/styles/components/signin.module.css';
-
+import ActiveNavLink from '@/app/components/ActiveNavLink';
 export default function SignInPage() {
   const router = useRouter();
   const [status, setStatus] = useState<{
@@ -66,6 +66,7 @@ export default function SignInPage() {
 
   return (
     <div className={styles.authContainer}>
+      <ActiveNavLink />
       <div className={styles.authWrapper}>
         <div className={styles.authCard}>
           <h1 className={styles.title}>Welcome Back</h1>

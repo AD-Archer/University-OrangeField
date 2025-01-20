@@ -1,6 +1,8 @@
 "use client"
 
 import React, { useState } from 'react';
+import ActiveNavLink from '@/app/components/ActiveNavLink';
+
 
 export default function ContactPage() {
   const [formData, setFormData] = useState({
@@ -54,6 +56,7 @@ export default function ContactPage() {
 
   return (
     <div className="container py-5">
+      <ActiveNavLink />
       <div className="row">
         {/* Contact Information */}
         <div className="col-lg-4 mb-4 mb-lg-0">

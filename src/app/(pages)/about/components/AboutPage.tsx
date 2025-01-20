@@ -3,10 +3,12 @@
 import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import ActiveNavLink from '@/app/components/ActiveNavLink';
 
 export default function AboutPage() {
   return (
     <div className="container py-5">
+      <ActiveNavLink />
       {/* Hero Section */}
       <section className="text-center mb-5">
         <h1 className="display-4 mb-4">About Orange Field University</h1>

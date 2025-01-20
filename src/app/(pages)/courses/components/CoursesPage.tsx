@@ -2,6 +2,8 @@
 
 import React from 'react';
 import Link from 'next/link';
+import ActiveNavLink from '@/app/components/ActiveNavLink';
+
 
 const programs = [
   {
@@ -34,6 +36,7 @@ const programs = [
 export default function CoursesPage() {
   return (
     <div className="container py-5">
+      <ActiveNavLink />
       <h1 className="display-4 text-center mb-5">Academic Programs</h1>
       
       {/* Programs Grid */}

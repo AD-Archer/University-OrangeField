@@ -3,12 +3,13 @@
 import React from 'react';
 import Banner from './Banner';
 import Link from 'next/link';
+import ActiveNavLink from '@/app/components/ActiveNavLink';
 
 export default function HomePage() {
   return (
     <div className="min-vh-100 d-flex flex-column">
       <Banner />
-      
+      <ActiveNavLink />
       <main className="flex-grow-1">
         {/* Featured Programs Section */}
         <section className="py-5">

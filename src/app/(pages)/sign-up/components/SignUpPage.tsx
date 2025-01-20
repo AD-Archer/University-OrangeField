@@ -4,6 +4,8 @@ import React, { useState } from 'react';
 import Image from 'next/image';
 import styles from '@/app/styles/components/signup.module.css';
 import { toast } from 'react-hot-toast';
+import ActiveNavLink from '@/app/components/ActiveNavLink';
+
 
 interface ApiError {
   error: string;
@@ -94,6 +96,7 @@ export default function SignUpPage() {
 
   return (
     <div className={styles.authContainer}>
+      <ActiveNavLink />
       <div className={styles.authWrapper}>
         <div className={styles.authCard}>
           <div className={styles.logoSection}>
