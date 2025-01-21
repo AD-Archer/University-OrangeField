@@ -84,7 +84,7 @@ export default function ProfilePage() {
     const loadUserProfile = () => {
       const storedProfile = localStorage.getItem(`userProfile_${user.email}`);
       if (storedProfile) {
-        const profile = JSON.parse(storedProfile);
+        const profile = JSON.parse(storedProfile) as UserProfile;
         
         // Update academics if 12 hours have passed
         if (shouldUpdateAcademics()) {
@@ -98,19 +98,20 @@ export default function ProfilePage() {
         setUserProfile(profile);
         
         // Update available courses by removing enrolled ones
-        const enrolledCodes = new Set(profile.enrolledCourses.map(c => c.code));
+        const enrolledCodes = new Set(profile.enrolledCourses.map((c: EnrolledCourse) => c.code));
         setAvailableCourses(allCoursesData.filter(course => !enrolledCodes.has(course.code)));
       } else {
         // Initialize with random academics for new users
         const { gpa, completedCredits } = calculateRandomAcademics();
-        const newProfile = {
-          ...userProfile,
-          gpa,
-          completedCredits
+        const initialProfile = {
+          enrolledCourses: [],
+          totalCredits: 120,
+          completedCredits,
+          gpa
         };
-        localStorage.setItem(`userProfile_${user.email}`, JSON.stringify(newProfile));
+        localStorage.setItem(`userProfile_${user.email}`, JSON.stringify(initialProfile));
         localStorage.setItem('lastAcademicUpdate', Date.now().toString());
-        setUserProfile(newProfile);
+        setUserProfile(initialProfile);
       }
     };
 

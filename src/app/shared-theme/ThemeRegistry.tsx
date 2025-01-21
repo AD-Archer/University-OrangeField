@@ -5,14 +5,39 @@ import { useServerInsertedHTML } from 'next/navigation';
 import { CacheProvider } from '@emotion/react';
 import { ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
-import { theme } from './theme';
 import { ReactNode, useState } from 'react';
+import { createTheme } from '@mui/material/styles';
+
+// Create theme here instead of importing
+const theme = createTheme({
+  palette: {
+    mode: 'light',
+    primary: {
+      main: '#1f3e5e',
+    },
+    secondary: {
+      main: '#f50057',
+    },
+  },
+  typography: {
+    fontFamily: 'inherit',
+  },
+  components: {
+    MuiButton: {
+      styleOverrides: {
+        root: {
+          textTransform: 'none',
+        },
+      },
+    },
+  },
+});
 
 // This implementation is from emotion-js
 // https://github.com/emotion-js/emotion/issues/2928#issuecomment-1319747902
 export default function ThemeRegistry({ children }: { children: ReactNode }) {
   const [{ cache, flush }] = useState(() => {
-    const cache = createCache({ key: 'mui' });
+    const cache = createCache({ key: 'css' });
     cache.compat = true;
     const prevInsert = cache.insert;
     let inserted: string[] = [];
