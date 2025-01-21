@@ -64,6 +64,33 @@ Key Features:
   * Clean, modern UI
   * Easy navigation
 
+- Admin Features:
+  * View all courses
+  * View all users
+  * View all enrollments
+  * View all departments
+  * View all instructors
+
+- Faculity Features:( to be added)
+  * View all courses
+  * View all users
+  * View all enrollments
+  * View all departments
+  * View all instructors
+
+Getting Started:
+1. Clone the repository
+2. Install dependencies
+3. Run development server
+4. Create a .env file
+5. Run the application
+6. Create and login with your email and password
+7. Enroll in courses(using your profile page in the navbar)
+8. View your academic progress(using your profile page in the navbar)
+9. View your courses(using your profile page in the navbar)
+10. View your enrollments(using your profile page in the navbar)
+
+
 Contributing:
 1. Fork the repository
 2. Create a feature branch
