@@ -1,99 +1,99 @@
 'use client';
 
-import { signOut, useSession } from 'next-auth/react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useState } from 'react';
+import { useAuth } from '@/contexts/AuthContext';
+import '@/app/styles/components/header.css';
 
 export default function Header() {
-  const { data: session } = useSession();
+  const { user, logout } = useAuth();
   const [isNavCollapsed, setIsNavCollapsed] = useState(true);
 
   const handleNavCollapse = () => setIsNavCollapsed(!isNavCollapsed);
 
   return (
-    <header className="top-navbar">
-      <nav className="navbar navbar-expand-lg">
-        <div className="container-fluid">
-          <Link href="/" className="navbar-brand">
-            <Image
-              id="nav-logo"
-              src="/images/Logo.svg"
-              alt="Orange Field University Logo"
-              width={80}
-              height={80}
-              priority
-            />
-          </Link>
+    <nav className="navbar navbar-expand-lg top-navbar">
+      <div className="container">
+        <Link href="/" className="navbar-brand">
+          <Image
+            src="/images/Logo.svg"
+            alt="Orange Field University Logo"
+            width={80}
+            height={80}
+            id="nav-logo"
+            priority
+          />
+        </Link>
 
-          <button
-            className="navbar-toggler"
-            type="button"
-            onClick={handleNavCollapse}
-            aria-controls="navbars-host"
-            aria-expanded={!isNavCollapsed}
-            aria-label="Toggle navigation"
-          >
-            <span className="icon-bar"></span>
-            <span className="icon-bar"></span>
-            <span className="icon-bar"></span>
-          </button>
+        <button
+          className="navbar-toggler"
+          type="button"
+          onClick={handleNavCollapse}
+          aria-expanded={!isNavCollapsed}
+          aria-label="Toggle navigation"
+        >
+          <span className="icon-bar"></span>
+          <span className="icon-bar"></span>
+          <span className="icon-bar"></span>
+        </button>
 
-          <div className={`${isNavCollapsed ? 'collapse' : ''} navbar-collapse`} id="navbars-host">
-            <ul className="navbar-nav ms-auto">
-              <li className="nav-item active">
-                <Link className="nav-link" href="/">Home</Link>
-              </li>
-              <li className="nav-item">
-                <Link className="nav-link" href="/about">About Us</Link>
-              </li>
-              <li className="nav-item dropdown">
-              <Link className="nav-link" href="/courses">Courses</Link>
+        <div className={`${isNavCollapsed ? 'collapse' : ''} navbar-collapse`}>
+          <ul className="navbar-nav ms-auto">
+            <li className="nav-item">
+              <Link href="/" className="nav-link">
+                Home
+              </Link>
+            </li>
+            <li className="nav-item">
+              <Link href="/about" className="nav-link">
+                About Us
+              </Link>
+            </li>
+            <li className="nav-item">
+              <Link href="/courses" className="nav-link">
+                Courses
+              </Link>
+            </li>
+            <li className="nav-item">
+              <Link href="/contact" className="nav-link">
+                Contact
+              </Link>
+            </li>
 
-              </li>
-              <li className="nav-item">
-                <Link className="nav-link" href="/contact">Contact</Link>
-              </li>
-
-              {session?.user ? (
-                <li className="nav-item dropdown">
-                  <Link 
-                    className="nav-link dropdown-toggle" 
-                    href="#" 
-                    role="button" 
-                    data-bs-toggle="dropdown" 
-                    aria-expanded="false"
-                  >
-                    {session.user.name}
+            {user ? (
+              <>
+                <li className="nav-item">
+                  <Link href="/profile" className="nav-link">
+                    My Profile
                   </Link>
-                  <ul className="dropdown-menu">
-                    <li><Link className="dropdown-item" href="/dashboard">Dashboard</Link></li>
-                    <li><Link className="dropdown-item" href="/profile">Profile</Link></li>
-                    <li><hr className="dropdown-divider" /></li>
-                    <li>
-                      <button
-                        onClick={() => signOut({ callbackUrl: '/' })}
-                        className="dropdown-item"
-                      >
-                        Sign Out
-                      </button>
-                    </li>
-                  </ul>
                 </li>
-              ) : (
-                <>
-                  <li className="nav-item">
-                    <Link className="nav-link" href="/sign-in">Sign In</Link>
-                  </li>
-                  <li className="nav-item">
-                    <Link className="nav-link" href="/sign-up">Sign Up</Link>
-                  </li>
-                </>
-              )}
-            </ul>
-          </div>
+                <li className="nav-item">
+                  <button 
+                    onClick={logout}
+                    className="nav-link"
+                  >
+                    Sign Out
+                  </button>
+                </li>
+              </>
+            ) : (
+              <>
+                <li className="nav-item">
+                  <Link href="/sign-in" className="nav-link">
+                    Sign In
+                  </Link>
+                </li>
+                <li className="nav-item">
+                  <Link href="/sign-up" className="nav-link">
+                    Sign Up
+                  </Link>
+                </li>
+              </>
+            )}
+          </ul>
         </div>
-      </nav>
-    </header>
+      </div>
+    </nav>
   );
 } 

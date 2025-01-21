@@ -1,7 +1,7 @@
 import "@/app/styles/global.css";
 import { GeistSans } from "geist/font/sans";
 import { type Metadata } from "next";
-import AuthProvider from "./components/AuthProvider";
+import { AuthProvider } from '@/contexts/AuthContext';
 import Header from "./components/Header";
 import Script from 'next/script';
 import Footer from "./components/Footer";

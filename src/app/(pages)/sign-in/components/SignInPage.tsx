@@ -2,14 +2,17 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
-import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
 import styles from '@/app/styles/components/signin.module.css';
 import ActiveNavLink from '@/app/components/ActiveNavLink';
+import { useAuth } from '@/contexts/AuthContext';
+import Cookies from 'js-cookie';
+
 export default function SignInPage() {
   const router = useRouter();
+  const { setUser } = useAuth();
   const [status, setStatus] = useState<{
     type: 'success' | 'error' | null;
     message: string;
@@ -35,28 +38,52 @@ export default function SignInPage() {
       setStatus({ type: null, message: '' });
 
       try {
-        const result = await signIn('credentials', {
-          redirect: false,
-          email: values.email.trim(),
-          password: values.password.trim(),
-        });
+        // Get users from localStorage
+        const usersJson = localStorage.getItem('users');
+        const users = usersJson ? JSON.parse(usersJson) : [];
 
-        if (result?.error) {
-          throw new Error(result.error);
+        // Find user
+        const user = users.find((u: any) => 
+          u.email === values.email && u.password === values.password
+        );
+
+        if (!user) {
+          setStatus({
+            type: 'error',
+            message: 'Invalid email or password',
+          });
+          return;
         }
+
+        // Create user data
+        const userData = {
+          email: user.email,
+          name: `${user.firstName} ${user.lastName}`,
+          isLoggedIn: true
+        };
+
+        // Set auth cookie
+        Cookies.set('auth', 'true', { expires: 7 });
+        
+        // Store in localStorage and context
+        localStorage.setItem('currentUser', JSON.stringify(userData));
+        setUser(userData);
 
         setStatus({
           type: 'success',
           message: 'Sign in successful! Redirecting...',
         });
 
-        // Redirect to dashboard or home page
-        router.push('/dashboard');
-        router.refresh(); // Refresh the page to update header
+        // Redirect after a short delay
+        setTimeout(() => {
+          router.push('/');
+          router.refresh();
+        }, 1500);
+
       } catch (error) {
         setStatus({
           type: 'error',
-          message: error instanceof Error ? error.message : 'Invalid credentials',
+          message: error instanceof Error ? error.message : 'An error occurred',
         });
       } finally {
         setIsLoading(false);
