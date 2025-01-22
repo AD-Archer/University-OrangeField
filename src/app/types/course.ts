@@ -1,15 +1,17 @@
 export interface Course {
-  title: string;
+  id: string;
   code: string;
-  credits: number;
+  title: string;
   description: string;
-  prerequisites: string;
-  skills: string[];
+  credits: number;
+  prerequisites?: string;
+  price: number;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 export interface EnrolledCourse extends Course {
-  status: 'In Progress' | 'Completed' | 'Enrolled';
-  grade?: string;
+  status: string;
 }
 
 export interface UserProfile {

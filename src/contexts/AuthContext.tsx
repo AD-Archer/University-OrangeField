@@ -4,8 +4,10 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 import Cookies from 'js-cookie';
 
 interface User {
+  id: string;
   email: string;
-  name?: string;
+  firstName?: string;
+  lastName?: string;
 }
 
 interface AuthContextType {
@@ -28,7 +30,28 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const userCookie = Cookies.get('user');
     if (userCookie) {
       try {
-        setUser(JSON.parse(userCookie));
+        const userData = JSON.parse(userCookie);
+        // Verify the user session is still valid
+        fetch('/api/auth/verify', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ id: userData.id }),
+        })
+        .then(res => {
+          if (res.ok) {
+            setUser(userData);
+          } else {
+            // If verification fails, clear the cookie
+            Cookies.remove('user');
+            setUser(null);
+          }
+        })
+        .catch(() => {
+          Cookies.remove('user');
+          setUser(null);
+        });
       } catch (e) {
         console.error('Error parsing user cookie:', e);
         Cookies.remove('user');
@@ -45,10 +68,20 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
-  const logout = () => {
-    handleSetUser(null);
-    localStorage.removeItem('lastAcademicUpdate');
-    // Optionally clear other user-specific data from localStorage
+  const logout = async () => {
+    try {
+      await fetch('/api/auth/logout', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ id: user?.id }),
+      });
+    } catch (error) {
+      console.error('Error logging out:', error);
+    } finally {
+      handleSetUser(null);
+    }
   };
 
   return (

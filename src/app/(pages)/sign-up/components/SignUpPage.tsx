@@ -50,71 +50,42 @@ export default function SignUpPage() {
     setStatus({ type: null, message: '' });
 
     try {
-      // Validation
       if (formData.password !== formData.confirmPassword) {
         throw new Error('Passwords do not match');
       }
 
-      if (!formData.email || !formData.password || !formData.firstName || !formData.lastName) {
-        throw new Error('Please fill in all required fields');
-      }
-
-      // Initialize users array from localStorage
-      let users = [];
-      const existingUsers = localStorage.getItem('users');
-      if (existingUsers) {
-        try {
-          users = JSON.parse(existingUsers);
-          if (!Array.isArray(users)) {
-            users = [];
-          }
-        } catch {
-          users = [];
-        }
-      }
-
-      // Check if email exists
-      const emailExists = users.some((user: any) => user.email === formData.email);
-      if (emailExists) {
-        throw new Error('Email already exists');
-      }
-
-      // Create new user
-      const newUser = {
-        firstName: formData.firstName,
-        lastName: formData.lastName,
-        email: formData.email,
-        password: formData.password,
-        phoneNumber: formData.phoneNumber,
-      };
-
-      // Add to users array
-      users.push(newUser);
-      localStorage.setItem('users', JSON.stringify(users));
-
-      // Create user session
-      const userData = {
-        name: `${newUser.firstName} ${newUser.lastName}`,
-        email: newUser.email,
-      };
-
-      // Update auth context
-      setUser(userData);
-
-      setStatus({
-        type: 'success',
-        message: 'Account created successfully! Redirecting...'
+      const response = await fetch('/api/auth/signup', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: formData.email,
+          password: formData.password,
+          firstName: formData.firstName,
+          lastName: formData.lastName,
+          phoneNumber: formData.phoneNumber
+        }),
       });
 
-      // Redirect after delay
-      setTimeout(() => {
-        router.push('/');
-      }, 1500);
+      const data = await response.json();
 
+      if (response.ok) {
+        setStatus({
+          type: 'success',
+          message: 'Account created successfully! Redirecting to sign in...',
+        });
+
+        setTimeout(() => {
+          router.push('/sign-in');
+        }, 1500);
+      } else {
+        throw new Error(data.error || 'Failed to create account');
+      }
     } catch (error) {
       setStatus({
         type: 'error',
-        message: error instanceof Error ? error.message : 'An error occurred during registration'
+        message: error instanceof Error ? error.message : 'An error occurred',
       });
     } finally {
       setIsLoading(false);

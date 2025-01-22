@@ -67,7 +67,7 @@ const allCoursesData: Course[] = [
 export default function ProfilePage() {
   const { user } = useAuth();
   const router = useRouter();
-  const [availableCourses, setAvailableCourses] = useState<Course[]>(allCoursesData);
+  const [availableCourses, setAvailableCourses] = useState<Course[]>([]);
   const [userProfile, setUserProfile] = useState<UserProfile>({
     enrolledCourses: [],
     totalCredits: 120,
@@ -83,73 +83,101 @@ export default function ProfilePage() {
       return;
     }
 
-    const loadUserProfile = () => {
-      const storedProfile = localStorage.getItem(`userProfile_${user.email}`);
-      if (storedProfile) {
-        const profile = JSON.parse(storedProfile) as UserProfile;
+    const loadUserProfile = async () => {
+      try {
+        // Fetch user profile
+        const profileRes = await fetch(`/api/user/profile?email=${user.email}`);
+        const profile = await profileRes.json();
         
-        // Update academics if 12 hours have passed
-        if (shouldUpdateAcademics()) {
-          const { gpa, completedCredits } = calculateRandomAcademics();
-          profile.gpa = gpa;
-          profile.completedCredits = completedCredits;
-          localStorage.setItem('lastAcademicUpdate', Date.now().toString());
-          localStorage.setItem(`userProfile_${user.email}`, JSON.stringify(profile));
+        if (profileRes.ok) {
+          setUserProfile(profile);
         }
+
+        // Fetch available courses
+        const coursesRes = await fetch('/api/courses');
+        const allCourses = await coursesRes.json();
         
-        setUserProfile(profile);
-        
-        // Update available courses by removing enrolled ones
-        const enrolledCodes = new Set(profile.enrolledCourses.map((c: EnrolledCourse) => c.code));
-        setAvailableCourses(allCoursesData.filter(course => !enrolledCodes.has(course.code)));
-      } else {
-        // Initialize with random academics for new users
-        const { gpa, completedCredits } = calculateRandomAcademics();
-        const initialProfile = {
-          enrolledCourses: [],
-          totalCredits: 120,
-          completedCredits,
-          gpa
-        };
-        localStorage.setItem(`userProfile_${user.email}`, JSON.stringify(initialProfile));
-        localStorage.setItem('lastAcademicUpdate', Date.now().toString());
-        setUserProfile(initialProfile);
+        if (coursesRes.ok) {
+          // Filter out enrolled courses
+          const enrolledCodes = new Set(profile.enrolledCourses.map((c: EnrolledCourse) => c.code));
+          setAvailableCourses(allCourses.filter((course: Course) => !enrolledCodes.has(course.code)));
+        }
+      } catch (error) {
+        console.error('Error loading profile:', error);
+        toast.error('Failed to load profile data');
       }
     };
 
     loadUserProfile();
   }, [user, router]);
 
-  const addToCart = (course: Course) => {
+  const addToCart = async (course: Course) => {
+    if (!user) return;
+
     if (userProfile.enrolledCourses.some(c => c.code === course.code)) {
       toast.error('Already enrolled in this course');
       return;
     }
 
-    // Get existing cart
-    const cartData = localStorage.getItem(`cart_${user?.email}`);
-    const cart = cartData ? JSON.parse(cartData) : [];
+    try {
+      const cartRes = await fetch('/api/cart', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          userId: user.id,
+          courseId: course.id
+        }),
+      });
 
-    // Check if course is already in cart
-    if (cart.some((c: Course) => c.code === course.code)) {
-      toast.error('Course is already in your cart');
-      return;
+      if (cartRes.ok) {
+        toast.success(`${course.title} added to cart`);
+      } else {
+        throw new Error('Failed to add to cart');
+      }
+    } catch (error) {
+      console.error('Error adding to cart:', error);
+      toast.error('Failed to add course to cart');
     }
-
-    // Add to cart
-    const updatedCart = [...cart, course];
-    localStorage.setItem(`cart_${user?.email}`, JSON.stringify(updatedCart));
-    toast.success(`${course.title} added to cart`);
   };
 
-  const handleUnenrollRequest = (course: EnrolledCourse) => {
+  const handleUnenrollRequest = async (course: EnrolledCourse) => {
     setSelectedCourse(course);
     setShowUnenrollModal(true);
   };
 
-  const confirmUnenrollRequest = () => {
-    if (selectedCourse) {
+  const confirmUnenrollRequest = async () => {
+    if (!selectedCourse || !user?.id) return;
+
+    try {
+      const response = await fetch('/api/enrollments/unenroll', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          userId: user.id,
+          courseId: selectedCourse.id
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to request unenrollment');
+      }
+
       toast.success('Your unenrollment request has been submitted. A staff member will contact you soon.');
+      
+      // Refresh user profile to show updated status
+      const profileRes = await fetch(`/api/user/profile?email=${user.email}`);
+      if (profileRes.ok) {
+        const profile = await profileRes.json();
+        setUserProfile(profile);
+      }
+    } catch (error) {
+      console.error('Error requesting unenrollment:', error);
+      toast.error('Failed to submit unenrollment request');
+    } finally {
       setShowUnenrollModal(false);
       setSelectedCourse(null);
     }

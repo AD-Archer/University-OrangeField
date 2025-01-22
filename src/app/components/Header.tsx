@@ -13,17 +13,24 @@ export default function Header() {
 
   const handleNavCollapse = () => setIsNavCollapsed(!isNavCollapsed);
 
-  // Update cart count when cart changes
   useEffect(() => {
-    if (user) {
-      const cartData = localStorage.getItem(`cart_${user.email}`);
-      if (cartData) {
-        const cart = JSON.parse(cartData);
-        setCartCount(cart.length);
+    const loadCartCount = async () => {
+      if (user?.id) {
+        try {
+          const res = await fetch(`/api/cart?userId=${user.id}`);
+          if (res.ok) {
+            const cartItems = await res.json();
+            setCartCount(cartItems.length);
+          }
+        } catch (error) {
+          console.error('Error loading cart count:', error);
+        }
       } else {
         setCartCount(0);
       }
-    }
+    };
+
+    loadCartCount();
   }, [user]);
 
   return (

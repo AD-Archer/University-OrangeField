@@ -7,23 +7,25 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "db:seed": "ts-node --compiler-options '{\"module\":\"CommonJS\"}' scripts/seed-db.ts"
   },
   "dependencies": {
     "@emotion/cache": "^11.11.0",
     "@emotion/react": "^11.11.4",
     "@emotion/styled": "^11.11.0",
     "@mui/material": "^5.15.11",
+    "@prisma/client": "^6.2.1",
     "@types/js-cookie": "^3.0.6",
     "@types/node": "20.11.24",
     "@types/react": "18.2.61",
     "@types/react-dom": "18.2.19",
+    "bcryptjs": "^2.4.3",
     "bootstrap": "^5.3.0",
     "formik": "^2.4.0",
     "geist": "^1.2.2",
     "js-cookie": "^3.0.5",
     "next": "14.1.0",
-    "prisma": "^6.2.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-hot-toast": "^2.4.0",
@@ -35,6 +37,8 @@
     "@typescript-eslint/eslint-plugin": "^7.1.1",
     "@typescript-eslint/parser": "^7.1.1",
     "eslint": "^8.57.0",
-    "eslint-config-next": "14.1.0"
+    "eslint-config-next": "14.1.0",
+    "prisma": "^6.2.1",
+    "ts-node": "^10.9.2"
   }
 }

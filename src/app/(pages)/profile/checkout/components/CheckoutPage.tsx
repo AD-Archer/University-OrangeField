@@ -33,10 +33,20 @@ export default function CheckoutPage() {
       return;
     }
 
-    const cartData = localStorage.getItem(`cart_${user.email}`);
-    if (cartData) {
-      setCart(JSON.parse(cartData));
-    }
+    const loadCart = async () => {
+      try {
+        const res = await fetch(`/api/cart?userId=${user.id}`);
+        if (res.ok) {
+          const cartItems = await res.json();
+          setCart(cartItems.map((item: any) => item.course));
+        }
+      } catch (error) {
+        console.error('Error loading cart:', error);
+        toast.error('Failed to load cart');
+      }
+    };
+
+    loadCart();
   }, [user, router]);
 
   const calculateTotal = () => {
@@ -51,6 +61,28 @@ export default function CheckoutPage() {
     }));
   };
 
+  const removeCourse = async (courseId: string) => {
+    try {
+      const res = await fetch(`/api/cart/${courseId}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ userId: user?.id })
+      });
+
+      if (res.ok) {
+        setCart(cart.filter(course => course.id !== courseId));
+        toast.success('Course removed from cart');
+      } else {
+        throw new Error('Failed to remove course');
+      }
+    } catch (error) {
+      console.error('Error removing course:', error);
+      toast.error('Failed to remove course');
+    }
+  };
+
   const handleCheckout = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
@@ -60,29 +92,32 @@ export default function CheckoutPage() {
         throw new Error('Please fill in all payment fields');
       }
 
-      // Get user profile
-      const profileData = localStorage.getItem(`userProfile_${user?.email}`);
-      const userProfile = profileData ? JSON.parse(profileData) : { enrolledCourses: [] };
+      // Create enrollments for all cart items
+      const enrollRes = await fetch('/api/enrollments/bulk', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          userId: user?.id,
+          courseIds: cart.map(course => course.id)
+        }),
+      });
 
-      // Add courses to enrolled courses
-      const updatedProfile = {
-        ...userProfile,
-        enrolledCourses: [
-          ...userProfile.enrolledCourses,
-          ...cart.map(course => ({
-            ...course,
-            status: 'Enrolled'
-          }))
-        ]
-      };
+      if (!enrollRes.ok) {
+        throw new Error('Failed to process enrollment');
+      }
 
-      // Save updated profile
-      localStorage.setItem(`userProfile_${user?.email}`, JSON.stringify(updatedProfile));
-      
       // Clear cart
-      localStorage.removeItem(`cart_${user?.email}`);
-      setCart([]);
+      await fetch('/api/cart/clear', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ userId: user?.id }),
+      });
 
+      setCart([]);
       toast.success('Enrollment successful!');
       setTimeout(() => {
         router.push('/profile');
@@ -92,13 +127,6 @@ export default function CheckoutPage() {
     } finally {
       setLoading(false);
     }
-  };
-
-  const removeCourse = (courseCode: string) => {
-    const updatedCart = cart.filter(course => course.code !== courseCode);
-    setCart(updatedCart);
-    localStorage.setItem(`cart_${user?.email}`, JSON.stringify(updatedCart));
-    toast.success('Course removed from cart');
   };
 
   if (cart.length === 0) {
@@ -142,7 +170,7 @@ export default function CheckoutPage() {
                   <p className={styles.coursePrice}>${course.credits * 350}</p>
                 </div>
                 <button 
-                  onClick={() => removeCourse(course.code)}
+                  onClick={() => removeCourse(course.id)}
                   className={styles.removeButton}
                 >
                   Remove

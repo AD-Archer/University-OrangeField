@@ -38,52 +38,32 @@ export default function SignInPage() {
       setStatus({ type: null, message: '' });
 
       try {
-        // Get users from localStorage
-        const usersJson = localStorage.getItem('users');
-        const users = usersJson ? JSON.parse(usersJson) : [];
-
-        // Find user
-        const user = users.find((u: any) => 
-          u.email === values.email && u.password === values.password
-        );
-
-        if (!user) {
-          setStatus({
-            type: 'error',
-            message: 'Invalid email or password',
-          });
-          return;
-        }
-
-        // Create user data
-        const userData = {
-          email: user.email,
-          name: `${user.firstName} ${user.lastName}`,
-          isLoggedIn: true
-        };
-
-        // Set auth cookie
-        Cookies.set('auth', 'true', { expires: 7 });
-        
-        // Store in localStorage and context
-        localStorage.setItem('currentUser', JSON.stringify(userData));
-        setUser(userData);
-
-        setStatus({
-          type: 'success',
-          message: 'Sign in successful! Redirecting...',
+        const response = await fetch('/api/auth/signin', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(values),
         });
 
-        // Redirect after a short delay
-        setTimeout(() => {
-          router.push('/');
-          router.refresh();
-        }, 1500);
+        const data = await response.json();
 
+        if (response.ok) {
+          setUser(data);
+          if (values.rememberMe) {
+            Cookies.set('user', JSON.stringify(data), { expires: 7 });
+          }
+          router.push('/profile');
+        } else {
+          setStatus({
+            type: 'error',
+            message: data.error || 'Invalid credentials'
+          });
+        }
       } catch (error) {
         setStatus({
           type: 'error',
-          message: error instanceof Error ? error.message : 'An error occurred',
+          message: 'An error occurred during sign in'
         });
       } finally {
         setIsLoading(false);
