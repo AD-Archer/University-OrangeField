@@ -13,54 +13,78 @@ import { calculateRandomAcademics, shouldUpdateAcademics } from '@/utils/academi
 const allCoursesData: Course[] = [
   // CS Courses
   {
-    title: "Web Development",
+    id: "1",
     code: "CS301",
+    title: "Web Development",
     credits: 3,
     description: "Learn modern web development using React, Next.js, and other cutting-edge technologies.",
     prerequisites: "CS201",
-    skills: ["React", "JavaScript", "Web Development"]
+    price: 1050.0,
+    skills: ["React", "JavaScript", "Web Development"],
+    createdAt: new Date(),
+    updatedAt: new Date()
   },
   {
-    title: "Cybersecurity Fundamentals",
+    id: "2",
     code: "CS302",
+    title: "Cybersecurity Fundamentals",
     credits: 3,
     description: "Learn to protect systems and networks from cyber threats.",
     prerequisites: "CS201",
-    skills: ["Network Security", "Cryptography", "Ethical Hacking"]
+    price: 1050.0,
+    skills: ["Network Security", "Cryptography", "Ethical Hacking"],
+    createdAt: new Date(),
+    updatedAt: new Date()
   },
   // Business Courses
   {
-    title: "Marketing Management",
+    id: "3",
     code: "BUS301",
+    title: "Marketing Management",
     credits: 3,
-    description: "Study marketing strategies and consumer behavior.",
+    description: "Study marketing strategies and consumer behavior. Learn to create effective marketing campaigns and build strong brands.",
     prerequisites: "BUS201",
-    skills: ["Marketing Strategy", "Market Analysis", "Digital Marketing"]
+    price: 1050.0,
+    skills: ["Marketing Strategy", "Market Analysis", "Digital Marketing"],
+    createdAt: new Date(),
+    updatedAt: new Date()
   },
   {
-    title: "Financial Management",
+    id: "4",
     code: "BUS302",
+    title: "Financial Management",
     credits: 3,
-    description: "Learn financial planning and investment strategies.",
+    description: "Learn financial planning and investment strategies. Master corporate finance principles and risk management.",
     prerequisites: "BUS201",
-    skills: ["Financial Analysis", "Investment", "Risk Management"]
+    price: 1050.0,
+    skills: ["Financial Analysis", "Investment", "Risk Management"],
+    createdAt: new Date(),
+    updatedAt: new Date()
   },
   // Engineering Courses
   {
-    title: "Mechanical Systems",
+    id: "5",
     code: "ENG301",
+    title: "Mechanical Systems",
     credits: 3,
-    description: "Study mechanical engineering principles and system design.",
+    description: "Study mechanical engineering principles and system design. Learn thermodynamics, mechanics, and material science.",
     prerequisites: "ENG201",
-    skills: ["CAD", "Thermodynamics", "Mechanics"]
+    price: 1050.0,
+    skills: ["CAD", "Thermodynamics", "Mechanics"],
+    createdAt: new Date(),
+    updatedAt: new Date()
   },
   {
-    title: "Civil Engineering Design",
+    id: "6",
     code: "ENG302",
+    title: "Civil Engineering Design",
     credits: 3,
-    description: "Learn structural design and construction principles.",
+    description: "Learn structural design and construction principles. Master AutoCAD and project management techniques.",
     prerequisites: "ENG201",
-    skills: ["Structural Analysis", "AutoCAD", "Construction Management"]
+    price: 1050.0,
+    skills: ["Structural Analysis", "AutoCAD", "Construction Management"],
+    createdAt: new Date(),
+    updatedAt: new Date()
   }
 ];
 
@@ -70,7 +94,7 @@ export default function ProfilePage() {
   const [availableCourses, setAvailableCourses] = useState<Course[]>([]);
   const [userProfile, setUserProfile] = useState<UserProfile>({
     enrolledCourses: [],
-    totalCredits: 120,
+    totalCredits: 0,
     completedCredits: 0,
     gpa: 0.0
   });
@@ -89,6 +113,8 @@ export default function ProfilePage() {
         const profileRes = await fetch(`/api/user/profile?email=${user.email}`);
         const profile = await profileRes.json();
         
+        console.log('Fetched user profile:', profile); // Log the profile response
+
         if (profileRes.ok) {
           setUserProfile(profile);
         }
@@ -205,20 +231,21 @@ export default function ProfilePage() {
           <div className={styles.section}>
             <h2>My Courses</h2>
             <div className={styles.coursesList}>
-              {userProfile.enrolledCourses.map((course, index) => (
-                <div key={index} className={styles.courseCard}>
-                  <h3>{course.title}</h3>
-                  <p>{course.code} • {course.credits} Credits</p>
-                  <p className={styles.courseStatus}>{course.status}</p>
-                  <button 
-                    onClick={() => handleUnenrollRequest(course)}
-                    className={styles.unenrollButton}
-                  >
-                    Request Unenrollment
-                  </button>
-                </div>
-              ))}
-              {userProfile.enrolledCourses.length === 0 && (
+              {userProfile.enrolledCourses && userProfile.enrolledCourses.length > 0 ? (
+                userProfile.enrolledCourses.map((course, index) => (
+                  <div key={index} className={styles.courseCard}>
+                    <h3>{course.title}</h3>
+                    <p>{course.code} • {course.credits} Credits</p>
+                    <p className={styles.courseStatus}>{course.status}</p>
+                    <button 
+                      onClick={() => handleUnenrollRequest(course)}
+                      className={styles.unenrollButton}
+                    >
+                      Request Unenrollment
+                    </button>
+                  </div>
+                ))
+              ) : (
                 <p className={styles.noCourses}>No courses enrolled yet</p>
               )}
             </div>
@@ -256,7 +283,7 @@ export default function ProfilePage() {
               </div>
               <div className={styles.progressItem}>
                 <label>Current GPA:</label>
-                <p>{userProfile.gpa.toFixed(2)}</p>
+                <p>{userProfile.gpa !== undefined ? userProfile.gpa.toFixed(2) : 'N/A'}</p>
               </div>
             </div>
           </div>

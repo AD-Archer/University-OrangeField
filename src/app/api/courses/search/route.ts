@@ -2,11 +2,11 @@ import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/db';
 
 export async function GET(req: Request) {
-  try {
-    const { searchParams } = new URL(req.url);
-    const query = searchParams.get('q') || '';
-    const department = searchParams.get('department');
+  const { searchParams } = new URL(req.url);
+  const query = searchParams.get('q') || '';
+  const department = searchParams.get('department');
 
+  try {
     const courses = await prisma.course.findMany({
       where: {
         AND: [

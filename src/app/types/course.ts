@@ -6,6 +6,7 @@ export interface Course {
   credits: number;
   prerequisites?: string;
   price: number;
+  skills?: string[];
   createdAt: Date;
   updatedAt: Date;
 }

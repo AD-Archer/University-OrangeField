@@ -5,8 +5,7 @@ export async function POST(req: Request) {
   try {
     const { id } = await req.json();
 
-    // You might want to clear any active sessions or tokens here
-    // For now, we'll just verify the user exists
+    // Verify the user exists
     const user = await prisma.user.findUnique({
       where: { id },
     });
@@ -15,6 +14,7 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'User not found' }, { status: 404 });
     }
 
+    // Perform logout logic (e.g., clear session, tokens, etc.)
     return NextResponse.json({ message: 'Logged out successfully' });
   } catch (error) {
     console.error('Error logging out:', error);

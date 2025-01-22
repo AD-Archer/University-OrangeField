@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/db';
-import { hash } from 'bcryptjs';
+import { hash, compare } from 'bcryptjs';
 
 export async function PUT(req: Request) {
   try {

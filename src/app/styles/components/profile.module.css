@@ -1,19 +1,24 @@
 .profileContainer {
   min-height: 100vh;
   background-color: #f5f5f5;
-  padding: 2rem;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .profileWrapper {
-  max-width: 1000px;
+  width: 100%;
+  max-width: 800px;
   margin: 0 auto;
 }
 
 .profileCard {
   background: white;
-  padding: 2rem;
+  padding: 20px;
   border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  width: 100%;
 }
 
 .title {
@@ -24,10 +29,7 @@
 }
 
 .section {
-  margin-bottom: 2rem;
-  padding: 1.5rem;
-  border: 1px solid #eee;
-  border-radius: 8px;
+  margin-bottom: 20px;
 }
 
 .section h2 {
@@ -56,17 +58,16 @@
 }
 
 .coursesList {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
 .courseCard {
-  padding: 1.5rem;
-  background: #f8f9fa;
-  border-radius: 6px;
-  border-left: 4px solid #1f3e5e;
-  transition: transform 0.2s ease;
+  background: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 15px;
 }
 
 .courseCard:hover {
@@ -125,8 +126,8 @@
 
 .progressGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 1rem;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 10px;
 }
 
 .progressItem {
@@ -230,4 +231,26 @@
 
 .cancelButton:hover {
   background: #5a6268;
+}
+
+@media (max-width: 600px) {
+  .profileContainer {
+    padding: 10px;
+  }
+
+  .profileCard {
+    padding: 15px;
+  }
+
+  .section {
+    margin-bottom: 15px;
+  }
+
+  .courseCard {
+    padding: 10px;
+  }
+
+  .progressItem {
+    text-align: center;
+  }
 } 
