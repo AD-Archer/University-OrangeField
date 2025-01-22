@@ -171,4 +171,16 @@
   .formRow {
     grid-template-columns: 1fr;
   }
+}
+
+.inputGroup {
+  margin-bottom: 20px;
+}
+
+.inputField {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px;
 } 
