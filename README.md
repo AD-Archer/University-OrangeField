@@ -16,24 +16,25 @@ Tech Stack:
 - Material-UI
 - Prisma
 - NextAuth
-- MongoDB
+- Postgres
 - Emotion (for styling)
 
 Getting Started:
 1. Install dependencies:
    npm install
+   run "node /script/seed.js" to seed the database
 
-2. Run development server:
+2. Create a .env file in the root directory view .env.example for the variables
+   Note: the database url is already set up for the azure postgres database
+
+
+3. Run development server:
    npm run dev
 
-3. Build for production:
+4. Build for production:
    npm run build
    npm start
 
-4. Create a .env file in the root directory and add the following variables:
-   NEXTAUTH_SECRET=
-   NEXTAUTH_URL=
-   DATABASE_URL=
 
 Project Structure:
 /src
