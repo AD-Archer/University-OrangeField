@@ -110,3 +110,39 @@
         padding-left: 15px;
     }
 }
+
+/* Add these styles to your existing header.css */
+
+.cart-link {
+  position: relative;
+  padding-right: 1.5rem !important;
+}
+
+.cart-count {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background: #dc3545;
+  color: white;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  font-weight: bold;
+}
+
+/* Update existing styles for better mobile view */
+@media (max-width: 991.98px) {
+  .cart-link {
+    display: inline-block;
+  }
+  
+  .cart-count {
+    position: relative;
+    display: inline-flex;
+    margin-left: 0.5rem;
+  }
+}

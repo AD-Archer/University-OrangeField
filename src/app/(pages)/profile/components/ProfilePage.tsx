@@ -74,6 +74,8 @@ export default function ProfilePage() {
     completedCredits: 0,
     gpa: 0.0
   });
+  const [showUnenrollModal, setShowUnenrollModal] = useState(false);
+  const [selectedCourse, setSelectedCourse] = useState<EnrolledCourse | null>(null);
 
   useEffect(() => {
     if (!user) {
@@ -118,29 +120,39 @@ export default function ProfilePage() {
     loadUserProfile();
   }, [user, router]);
 
-  const enrollInCourse = (course: Course) => {
+  const addToCart = (course: Course) => {
     if (userProfile.enrolledCourses.some(c => c.code === course.code)) {
       toast.error('Already enrolled in this course');
       return;
     }
 
-    const newEnrolledCourse: EnrolledCourse = {
-      ...course,
-      status: 'Enrolled'
-    };
+    // Get existing cart
+    const cartData = localStorage.getItem(`cart_${user?.email}`);
+    const cart = cartData ? JSON.parse(cartData) : [];
 
-    const updatedProfile = {
-      ...userProfile,
-      enrolledCourses: [...userProfile.enrolledCourses, newEnrolledCourse]
-    };
+    // Check if course is already in cart
+    if (cart.some((c: Course) => c.code === course.code)) {
+      toast.error('Course is already in your cart');
+      return;
+    }
 
-    // Remove course from available courses
-    setAvailableCourses(availableCourses.filter(c => c.code !== course.code));
+    // Add to cart
+    const updatedCart = [...cart, course];
+    localStorage.setItem(`cart_${user?.email}`, JSON.stringify(updatedCart));
+    toast.success(`${course.title} added to cart`);
+  };
 
-    // Save to localStorage
-    localStorage.setItem(`userProfile_${user?.email}`, JSON.stringify(updatedProfile));
-    setUserProfile(updatedProfile);
-    toast.success(`Successfully enrolled in ${course.title}`);
+  const handleUnenrollRequest = (course: EnrolledCourse) => {
+    setSelectedCourse(course);
+    setShowUnenrollModal(true);
+  };
+
+  const confirmUnenrollRequest = () => {
+    if (selectedCourse) {
+      toast.success('Your unenrollment request has been submitted. A staff member will contact you soon.');
+      setShowUnenrollModal(false);
+      setSelectedCourse(null);
+    }
   };
 
   return (
@@ -170,6 +182,12 @@ export default function ProfilePage() {
                   <h3>{course.title}</h3>
                   <p>{course.code} • {course.credits} Credits</p>
                   <p className={styles.courseStatus}>{course.status}</p>
+                  <button 
+                    onClick={() => handleUnenrollRequest(course)}
+                    className={styles.unenrollButton}
+                  >
+                    Request Unenrollment
+                  </button>
                 </div>
               ))}
               {userProfile.enrolledCourses.length === 0 && (
@@ -186,13 +204,14 @@ export default function ProfilePage() {
                 <div key={index} className={styles.courseCard}>
                   <h3>{course.title}</h3>
                   <p>{course.code} • {course.credits} Credits</p>
+                  <p className={styles.coursePrice}>${course.credits * 350}</p>
                   <p className={styles.courseDescription}>{course.description}</p>
                   <p className={styles.prerequisites}>Prerequisites: {course.prerequisites}</p>
                   <button 
-                    onClick={() => enrollInCourse(course)}
+                    onClick={() => addToCart(course)}
                     className={styles.enrollButton}
                   >
-                    Enroll Now
+                    Add to Cart
                   </button>
                 </div>
               ))}
@@ -213,6 +232,33 @@ export default function ProfilePage() {
               </div>
             </div>
           </div>
+
+          {/* Add Modal */}
+          {showUnenrollModal && (
+            <div className={styles.modalOverlay}>
+              <div className={styles.modal}>
+                <h2>Unenrollment Request</h2>
+                <p>Are you sure you want to request unenrollment from {selectedCourse?.title}?</p>
+                <p className={styles.modalNote}>
+                  Note: A staff member will contact you to confirm this request and discuss any potential refunds or academic implications.
+                </p>
+                <div className={styles.modalButtons}>
+                  <button 
+                    onClick={confirmUnenrollRequest}
+                    className={styles.confirmButton}
+                  >
+                    Confirm Request
+                  </button>
+                  <button 
+                    onClick={() => setShowUnenrollModal(false)}
+                    className={styles.cancelButton}
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>

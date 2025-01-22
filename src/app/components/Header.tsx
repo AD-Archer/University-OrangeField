@@ -2,15 +2,29 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import '@/app/styles/components/header.css';
 
 export default function Header() {
   const { user, logout } = useAuth();
   const [isNavCollapsed, setIsNavCollapsed] = useState(true);
+  const [cartCount, setCartCount] = useState(0);
 
   const handleNavCollapse = () => setIsNavCollapsed(!isNavCollapsed);
+
+  // Update cart count when cart changes
+  useEffect(() => {
+    if (user) {
+      const cartData = localStorage.getItem(`cart_${user.email}`);
+      if (cartData) {
+        const cart = JSON.parse(cartData);
+        setCartCount(cart.length);
+      } else {
+        setCartCount(0);
+      }
+    }
+  }, [user]);
 
   return (
     <nav className="navbar navbar-expand-lg top-navbar">
@@ -66,6 +80,11 @@ export default function Header() {
                 <li className="nav-item">
                   <Link href="/profile" className="nav-link">
                     My Profile
+                  </Link>
+                </li>
+                <li className="nav-item">
+                  <Link href="/profile/checkout" className="nav-link cart-link">
+                    Cart {cartCount > 0 && <span className="cart-count">{cartCount}</span>}
                   </Link>
                 </li>
                 <li className="nav-item">
