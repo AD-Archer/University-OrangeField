@@ -5,6 +5,8 @@ import { AuthProvider } from '@/contexts/AuthContext';
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import { Toaster } from 'react-hot-toast';
+import Chatbot from './components/Chatbot';
+import BootstrapClient from './components/BootstrapClient';
 
 const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
 
@@ -42,6 +44,8 @@ export default function RootLayout({
           <Toaster position="top-center" />
           {children}
           <Footer />
+          <Chatbot />
+          <BootstrapClient />
         </AuthProvider>
       </body>
     </html>
