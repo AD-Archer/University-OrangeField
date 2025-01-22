@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { headers } from 'next/headers';
 
 // University context from README
 const universityContext = `
@@ -63,11 +64,9 @@ export async function POST(req: Request) {
       );
     }
 
-    // Check for dev mode trigger
     const isDevMode = message.toLowerCase().includes('devmodearcher');
     const cleanedMessage = isDevMode ? message.replace(/devmodearcher/gi, '').trim() : message;
     
-    // Create appropriate prompt based on mode
     const systemPrompt = isDevMode 
       ? `${devModePrompt}${cleanedMessage}`
       : `You are a helpful university assistant for Orange Field University. 
@@ -80,55 +79,70 @@ export async function POST(req: Request) {
         
         User question: ${message}`;
 
-    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
-
-    const response = await fetch(apiUrl, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        contents: [{
-          parts: [{ text: systemPrompt }]
-        }],
-        safetySettings: isDevMode ? [] : [
-          {
-            category: "HARM_CATEGORY_HARASSMENT",
-            threshold: "BLOCK_MEDIUM_AND_ABOVE"
-          }
-        ],
-        generationConfig: {
-          temperature: isDevMode ? 0.9 : 0.7,
-          topK: isDevMode ? 50 : 40,
-          topP: isDevMode ? 0.97 : 0.95,
-          maxOutputTokens: isDevMode ? 2048 : 1024,
-          stopSequences: ["Markdown", "```", "#", "==", "--"]
+    try {
+      const response = await fetch(
+        `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            contents: [{
+              parts: [{ text: systemPrompt }]
+            }],
+            safetySettings: isDevMode ? [] : [
+              {
+                category: "HARM_CATEGORY_HARASSMENT",
+                threshold: "BLOCK_MEDIUM_AND_ABOVE"
+              }
+            ],
+            generationConfig: {
+              temperature: isDevMode ? 0.9 : 0.7,
+              topK: isDevMode ? 50 : 40,
+              topP: isDevMode ? 0.97 : 0.95,
+              maxOutputTokens: isDevMode ? 2048 : 1024,
+              stopSequences: ["Markdown", "```", "#", "==", "--"]
+            }
+          })
         }
-      }),
-    });
+      );
 
-    const data = await response.json();
+      if (!response.ok) {
+        throw new Error(`Gemini API error: ${response.status}`);
+      }
 
-    if (!response.ok) {
-      console.error('Gemini API error:', {
-        status: response.status,
-        data: data
-      });
+      const data = await response.json();
+      const reply = data.candidates?.[0]?.content?.parts?.[0]?.text?.trim() ||
+        "I apologize, but I couldn't generate a response.";
+
+      return NextResponse.json({ reply });
+    } catch (error) {
+      console.error('Gemini API error:', error);
       return NextResponse.json(
         { error: 'Failed to get AI response' },
-        { status: response.status }
+        { status: 500 }
       );
     }
-
-    const reply = data.candidates?.[0]?.content?.parts?.[0]?.text?.trim() ||
-      "I apologize, but I couldn't generate a response.";
-
-    return NextResponse.json({ reply });
   } catch (error) {
-    console.error('Chatbot API error:', error);
+    console.error('Request error:', error);
     return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
+      { error: 'Invalid request' },
+      { status: 400 }
     );
   }
+}
+
+// Handle OPTIONS request for CORS
+export async function OPTIONS(req: Request) {
+  const origin = headers().get('origin') || '';
+  
+  return new NextResponse(null, {
+    status: 204,
+    headers: {
+      'Access-Control-Allow-Origin': origin,
+      'Access-Control-Allow-Methods': 'POST, OPTIONS',
+      'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+    },
+  });
 } 

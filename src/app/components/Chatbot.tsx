@@ -46,17 +46,18 @@ const Chatbot = () => {
       const response = await fetch('/api/chatbot', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ message: userMessage }),
-        credentials: 'same-origin'
+        body: JSON.stringify({ 
+          message: userMessage 
+        })
       });
 
       const data = await response.json() as ChatResponse;
 
       if (!response.ok) {
-        const errorMessage = data.error || 'An error occurred while processing your request';
-        throw new Error(`${errorMessage} (${response.status})`);
+        console.error('API Error:', data);
+        throw new Error(data.error || `Error: ${response.status}`);
       }
 
       setMessages(prev => {
@@ -78,7 +79,7 @@ const Chatbot = () => {
         if (newMessageIndex < newMessages.length) {
           const messageToUpdate = newMessages[newMessageIndex];
           if (messageToUpdate) {
-            messageToUpdate.bot = `Error: ${errorMessage}. Please try again later.`;
+            messageToUpdate.bot = `Error: ${errorMessage}`;
           }
         }
         return newMessages;

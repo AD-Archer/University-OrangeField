@@ -6,7 +6,11 @@ export function middleware(request: NextRequest) {
   const user = request.cookies.get('user');
 
   // List of paths that don't require authentication
-  const publicPaths = ['/api/auth/signin', '/api/auth/signup'];
+  const publicPaths = [
+    '/api/auth/signin', 
+    '/api/auth/signup',
+    '/api/chatbot', // Add chatbot to public paths
+  ];
 
   // Check if the path requires authentication
   if (!publicPaths.includes(request.nextUrl.pathname)) {
