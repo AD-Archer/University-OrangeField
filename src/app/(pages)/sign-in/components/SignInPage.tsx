@@ -46,15 +46,15 @@ export default function SignInPage() {
           body: JSON.stringify(values),
         });
 
-        const data = await response.json();
-
         if (response.ok) {
-          setUser(data);
+          const userData = await response.json();
+          setUser(userData);
           if (values.rememberMe) {
-            Cookies.set('user', JSON.stringify(data), { expires: 7 });
+            Cookies.set('user', JSON.stringify(userData), { expires: 7 });
           }
           router.push('/profile');
         } else {
+          const data = await response.json();
           setStatus({
             type: 'error',
             message: data.error || 'Invalid credentials'

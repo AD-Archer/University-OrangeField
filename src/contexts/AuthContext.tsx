@@ -14,56 +14,69 @@ interface AuthContextType {
   user: User | null;
   setUser: (user: User | null) => void;
   logout: () => void;
+  isLoading: boolean;
 }
 
 const AuthContext = createContext<AuthContextType>({
   user: null,
   setUser: () => {},
   logout: () => {},
+  isLoading: true,
 });
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Check for existing user in cookies on mount
-    const userCookie = Cookies.get('user');
-    if (userCookie) {
+    const checkAuth = async () => {
       try {
+        // Check for user data in cookies
+        const userCookie = Cookies.get('user');
+        if (!userCookie) {
+          setIsLoading(false);
+          return;
+        }
+
+        // Parse user data
         const userData = JSON.parse(userCookie);
-        // Verify the user session is still valid
-        fetch('/api/auth/verify', {
+        
+        // Verify the session
+        const response = await fetch('/api/auth/verify', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({ id: userData.id }),
-        })
-        .then(res => {
-          if (res.ok) {
-            setUser(userData);
-          } else {
-            // If verification fails, clear the cookie
-            Cookies.remove('user');
-            setUser(null);
-          }
-        })
-        .catch(() => {
+        });
+
+        if (response.ok) {
+          setUser(userData);
+        } else {
+          // Clear invalid session
           Cookies.remove('user');
           setUser(null);
-        });
-      } catch (e) {
-        console.error('Error parsing user cookie:', e);
+        }
+      } catch (error) {
+        console.error('Auth check failed:', error);
+        // Clear potentially corrupted data
         Cookies.remove('user');
+        setUser(null);
+      } finally {
+        setIsLoading(false);
       }
-    }
+    };
+
+    checkAuth();
   }, []);
 
   const handleSetUser = (newUser: User | null) => {
     setUser(newUser);
     if (newUser) {
+      // Store user data in cookie
       Cookies.set('user', JSON.stringify(newUser), { expires: 7 }); // 7 days
     } else {
+      // Clear cookie on logout/null user
       Cookies.remove('user');
     }
   };
@@ -85,7 +98,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   return (
-    <AuthContext.Provider value={{ user, setUser: handleSetUser, logout }}>
+    <AuthContext.Provider value={{ user, setUser: handleSetUser, logout, isLoading }}>
       {children}
     </AuthContext.Provider>
   );

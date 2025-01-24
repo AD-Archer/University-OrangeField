@@ -90,7 +90,7 @@ const allCoursesData: Course[] = [
 ];
 
 export default function ProfilePage() {
-  const { user } = useAuth();
+  const { user, isLoading } = useAuth();
   const router = useRouter();
   const [availableCourses, setAvailableCourses] = useState<Course[]>([]);
   const [userProfile, setUserProfile] = useState<UserProfile>({
@@ -110,38 +110,40 @@ export default function ProfilePage() {
   });
 
   useEffect(() => {
-    if (!user) {
+    if (isLoading) return;
+
+    if (!isLoading && !user) {
       router.push('/sign-in');
       return;
     }
 
     const loadUserProfile = async () => {
       try {
-        // Fetch user profile
+        if (!user?.email) return;
+
         const profileRes = await fetch(`/api/user/profile?email=${user.email}`);
         const profile = await profileRes.json();
         
-        console.log('Fetched user profile:', profile); // Log the profile response
+        console.log('Fetched user profile:', profile);
 
         if (profileRes.ok) {
           setUserProfile(profile);
         }
 
-        // Fetch available courses
         const coursesRes = await fetch('/api/courses');
         const allCourses = await coursesRes.json();
         
         if (coursesRes.ok) {
-          // Filter out enrolled courses
           const enrolledCodes = new Set(profile.enrolledCourses.map((c: EnrolledCourse) => c.code));
           setAvailableCourses(allCourses.filter((course: Course) => !enrolledCodes.has(course.code)));
         }
 
-        // Add this to fetch personal details
-        const userDetailsRes = await fetch(`/api/user/details?userId=${user.id}`);
-        if (userDetailsRes.ok) {
-          const details = await userDetailsRes.json();
-          setPersonalDetails(details);
+        if (user?.id) {
+          const userDetailsRes = await fetch(`/api/user/details?userId=${user.id}`);
+          if (userDetailsRes.ok) {
+            const details = await userDetailsRes.json();
+            setPersonalDetails(details);
+          }
         }
       } catch (error) {
         console.error('Error loading profile:', error);
@@ -150,7 +152,7 @@ export default function ProfilePage() {
     };
 
     loadUserProfile();
-  }, [user, router]);
+  }, [user, router, isLoading]);
 
   const addToCart = async (course: Course) => {
     if (!user) return;
@@ -209,7 +211,6 @@ export default function ProfilePage() {
 
       toast.success('Your unenrollment request has been submitted. A staff member will contact you soon.');
       
-      // Refresh user profile to show updated status
       const profileRes = await fetch(`/api/user/profile?email=${user.email}`);
       if (profileRes.ok) {
         const profile = await profileRes.json();
@@ -223,6 +224,16 @@ export default function ProfilePage() {
       setSelectedCourse(null);
     }
   };
+
+  if (isLoading) {
+    return (
+      <div className={styles.profileContainer}>
+        <div className={styles.loadingState}>
+          Loading...
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className={styles.profileContainer}>
