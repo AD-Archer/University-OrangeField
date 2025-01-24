@@ -1,9 +1,9 @@
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { prisma } from '@/lib/db';
-import AdminDashboard from './components/AdminDashboard';
+import StaffDashboard from './components/StaffDashboard';
 
-export default async function AdminPage() {
+export default async function StaffPage() {
   const cookieStore = cookies();
   const userCookie = cookieStore.get('user');
   
@@ -45,13 +45,13 @@ export default async function AdminPage() {
       <div className="min-h-screen bg-gray-50">
         <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
           <div className="px-4 py-6 sm:px-0">
-            <AdminDashboard courses={courses} />
+            <StaffDashboard courses={courses} />
           </div>
         </div>
       </div>
     );
   } catch (error) {
-    console.error('Error in admin page:', error);
+    console.error('Error in staff page:', error);
     redirect('/sign-in');
   }
 } 

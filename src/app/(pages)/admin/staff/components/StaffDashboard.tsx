@@ -26,11 +26,11 @@ interface Course {
   enrollments: Enrollment[];
 }
 
-interface AdminDashboardProps {
+interface StaffDashboardProps {
   courses: Course[];
 }
 
-export default function AdminDashboard({ courses }: AdminDashboardProps) {
+export default function StaffDashboard({ courses }: StaffDashboardProps) {
   const router = useRouter();
   const [newCourse, setNewCourse] = useState({
     code: '',
@@ -104,7 +104,7 @@ export default function AdminDashboard({ courses }: AdminDashboardProps) {
     <div className="container">
       <div className="row mb-4">
         <div className="col">
-          <h1>Admin Dashboard</h1>
+          <h1>Staff Dashboard</h1>
         </div>
       </div>
 
