@@ -15,6 +15,7 @@ model User {
   lastName      String?
   phoneNumber   String?
   address       String?
+  isAdmin       Boolean   @default(false)
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
   enrollments   Enrollment[]

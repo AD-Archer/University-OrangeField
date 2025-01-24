@@ -12,6 +12,7 @@ export async function POST(req: Request) {
         email: true,
         firstName: true,
         lastName: true,
+        isAdmin: true,
       },
     });
 

@@ -84,6 +84,13 @@ export default function Header() {
 
             {user ? (
               <>
+                {user.isAdmin && (
+                  <li className="nav-item">
+                    <Link href="/admin" className="nav-link">
+                      Admin Dashboard
+                    </Link>
+                  </li>
+                )}
                 <li className="nav-item">
                   <Link href="/profile" className="nav-link">
                     My Profile
