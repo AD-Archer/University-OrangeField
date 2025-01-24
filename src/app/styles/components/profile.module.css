@@ -17,6 +17,7 @@
   background: white;
   padding: 20px;
   border-radius: 8px;
+  border: 2px solid rgba(0, 0, 0, 0.6);
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   width: 100%;
 }
@@ -48,6 +49,7 @@
   padding: 1rem;
   background: #f8f9fa;
   border-radius: 6px;
+  border: 2px solid rgba(0, 0, 0, 0.6);
 }
 
 .infoItem label {
@@ -65,7 +67,7 @@
 
 .courseCard {
   background: #f9f9f9;
-  border: 1px solid #ddd;
+  border: 2px solid rgba(0, 0, 0, 0.6);
   border-radius: 8px;
   padding: 15px;
 }
@@ -171,20 +173,20 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.5);
   display: flex;
-  align-items: center;
   justify-content: center;
+  align-items: center;
   z-index: 1000;
 }
 
 .modal {
-  background: white;
-  padding: 2rem;
+  background-color: white;
+  padding: 24px;
   border-radius: 8px;
-  max-width: 500px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   width: 90%;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  max-width: 500px;
 }
 
 .modal h2 {
@@ -203,34 +205,83 @@
 
 .modalButtons {
   display: flex;
-  gap: 1rem;
-  margin-top: 1.5rem;
+  gap: 12px;
+  justify-content: flex-end;
+  margin-top: 24px;
 }
 
 .confirmButton {
-  padding: 0.5rem 1rem;
-  background: #dc3545;
+  background-color: #4caf50;
   color: white;
   border: none;
+  padding: 8px 16px;
   border-radius: 4px;
   cursor: pointer;
+  font-size: 14px;
 }
 
 .cancelButton {
-  padding: 0.5rem 1rem;
-  background: #6c757d;
+  background-color: #f44336;
   color: white;
   border: none;
+  padding: 8px 16px;
   border-radius: 4px;
   cursor: pointer;
+  font-size: 14px;
 }
 
-.confirmButton:hover {
-  background: #c82333;
+.confirmButton:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
 }
 
-.cancelButton:hover {
-  background: #5a6268;
+.editButton {
+  background-color: #4a90e2;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.2s;
+  margin-top: 1rem;
+  width: 100%;
+}
+
+.editButton:hover {
+  background-color: #357abd;
+}
+
+.editForm {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+}
+
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.formGroup label {
+  font-weight: 500;
+  color: #333;
+}
+
+.formGroup input {
+  padding: 8px 12px;
+  border: 2px solid rgba(0, 0, 0, 0.6);
+  border-radius: 4px;
+  font-size: 14px;
+  width: 100%;
+}
+
+.formGroup input:focus {
+  outline: none;
+  border-color: rgba(0, 0, 0, 0.8);
+  box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.2);
 }
 
 @media (max-width: 600px) {

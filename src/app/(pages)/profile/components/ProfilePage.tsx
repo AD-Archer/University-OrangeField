@@ -8,6 +8,7 @@ import ActiveNavLink from '@/app/components/ActiveNavLink';
 import { Course, EnrolledCourse, UserProfile } from '@/app/types/course';
 import toast from 'react-hot-toast';
 import { calculateRandomAcademics, shouldUpdateAcademics } from '@/utils/academicUtils';
+import EditProfileForm from './EditProfileForm';
 
 // Combined courses data
 const allCoursesData: Course[] = [
@@ -100,6 +101,13 @@ export default function ProfilePage() {
   });
   const [showUnenrollModal, setShowUnenrollModal] = useState(false);
   const [selectedCourse, setSelectedCourse] = useState<EnrolledCourse | null>(null);
+  const [showEditProfile, setShowEditProfile] = useState(false);
+  const [personalDetails, setPersonalDetails] = useState({
+    firstName: '',
+    lastName: '',
+    phoneNumber: '',
+    address: ''
+  });
 
   useEffect(() => {
     if (!user) {
@@ -127,6 +135,13 @@ export default function ProfilePage() {
           // Filter out enrolled courses
           const enrolledCodes = new Set(profile.enrolledCourses.map((c: EnrolledCourse) => c.code));
           setAvailableCourses(allCourses.filter((course: Course) => !enrolledCodes.has(course.code)));
+        }
+
+        // Add this to fetch personal details
+        const userDetailsRes = await fetch(`/api/user/details?userId=${user.id}`);
+        if (userDetailsRes.ok) {
+          const details = await userDetailsRes.json();
+          setPersonalDetails(details);
         }
       } catch (error) {
         console.error('Error loading profile:', error);
@@ -224,6 +239,24 @@ export default function ProfilePage() {
                 <label>Email:</label>
                 <p>{user?.email}</p>
               </div>
+              <div className={styles.infoItem}>
+                <label>Name:</label>
+                <p>{personalDetails.firstName} {personalDetails.lastName}</p>
+              </div>
+              <div className={styles.infoItem}>
+                <label>Phone:</label>
+                <p>{personalDetails.phoneNumber || 'Not set'}</p>
+              </div>
+              <div className={styles.infoItem}>
+                <label>Address:</label>
+                <p>{personalDetails.address || 'Not set'}</p>
+              </div>
+              <button
+                onClick={() => setShowEditProfile(true)}
+                className={styles.editButton}
+              >
+                Edit Details
+              </button>
             </div>
           </div>
 
@@ -313,6 +346,14 @@ export default function ProfilePage() {
                 </div>
               </div>
             </div>
+          )}
+
+          {showEditProfile && (
+            <EditProfileForm
+              initialDetails={personalDetails}
+              onClose={() => setShowEditProfile(false)}
+              onUpdate={setPersonalDetails}
+            />
           )}
         </div>
       </div>
