@@ -90,6 +90,7 @@ Getting Started:
 8. View your academic progress(using your profile page in the navbar)
 9. View your courses(using your profile page in the navbar)
 10. View your enrollments(using your profile page in the navbar)
+11. Create an naturally and make it an admin account(inside of your database)
 
 
 Contributing:
